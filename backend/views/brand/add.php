@@ -6,16 +6,22 @@ use yii\web\JsExpression;
 $form = ActiveForm::begin();
 echo $form->field($model,'name')->textInput();
 
-//外部TAG
-echo Html::fileInput('logo', NULL, ['id' => 'logo-up']);
-echo Uploadify::widget([
-    'url' => yii\helpers\Url::to(['s-upload']),
-    'id' => 'logo-up',
-    'csrf' => true,
-    'renderTag' => false,
+
+echo $form->field($model, 'logo')->widget(Uploadify::className(), [
+    'url'       => yii\helpers\Url::to(['upload/s-upload']),
+    'csrf'      => true,
+    'renderTag' => true,
     'jsOptions' => [
-        'width' => 120,
-        'height' => 40,
+        'width'           => 120,
+        'height'          => 40,
+        'buttonText'      => '选择文件',
+        'buttonClass'=>'bg-primary',
+        'onUploadError'   => new JsExpression(<<<EOF
+function(file, errorCode, errorMsg, errorString) {
+    console.log('The file ' + file.name + ' could not be uploaded: ' + errorString + errorCode + errorMsg);
+}
+EOF
+        ),
         'onUploadSuccess' => new JsExpression(<<<EOF
 function(file, data, response) {
     data = JSON.parse(data);
@@ -33,7 +39,8 @@ EOF
     ]
 ]);
 
-echo Html::hiddenInput('logo','',['id'=>'logo-url']);
+//echo $form->field($model,'logo')->label(false)->hiddenInput(['id'=>'logo-url']);
+echo Html::hiddenInput('logo',$model->logo,['id'=>'logo-url']);
 
 
 

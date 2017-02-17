@@ -2,19 +2,16 @@
 /**
  * Created by PhpStorm.
  * User: admin
- * Date: 2017/2/16
- * Time: 14:30
+ * Date: 2017/2/17
+ * Time: 10:43
  */
 
 namespace backend\controllers;
-
-
-use backend\models\Brand;
-use yii\web\Controller;
 use xj\uploadify\UploadAction;
 use crazyfd\qiniu\Qiniu;
+use yii\web\Controller;
 
-class BrandController extends Controller
+class UploadController extends  Controller
 {
     public function actions() {
         return [
@@ -53,67 +50,12 @@ class BrandController extends Controller
                     $key = $action->getFilename();
                     $qiniu->uploadFile($savePath,$key);
                     $url = $qiniu->getLink($key);
+                    $action->output['msg'] = $url?'上传成功':'上传失败';
 //                    $action->output['fileUrl'] = $action->getWebUrl();//四哥许坤:下面跟了另外三种可以替换的信息,根据需要修改.如果想获取更多信息,可以参考下面
 //                    $action->output['savePath'] = $action->getSavePath();
                     $action->output['fileUrl'] =$url ;
                 },
             ],
         ];
-    }
-
-    /**
-     * 列表页面
-     * @return string
-     */
-    public function actionIndex()
-    {
-        //获取品牌列表
-        $list = Brand::find()->where(['<>','status',-1])->all();
-        return $this->render('index',[
-            'list'=>$list
-        ]);
-    }
-
-    public function actionAdd()
-    {
-        //创建模型对象，并传递给视图
-        $model = new Brand();
-        //判断是否提交
-        if(\Yii::$app->request->isPost){
-            //获取数据
-            $model->load(\Yii::$app->request->post());
-            //验证数据,执行添加
-            if($model->save()){
-                //跳转
-                $this->redirect(['index']);
-            }
-        }
-        return $this->render('add',[
-            'model'=>$model,
-        ]);
-    }
-
-    public function actionEdit($id)
-    {
-        //获取品牌对象
-        $model = Brand::findOne($id);
-
-        //渲染视图
-        return $this->render('add',[
-            'model'=>$model,
-        ]);
-    }
-
-    public function actionDelete($id)
-    {
-        //获取品牌修改字段
-
-        $model = Brand::findOne($id);
-        $model->status = -1;
-        if($model->save()){
-            //跳转
-            $this->redirect(['index']);
-        }
-
     }
 }
