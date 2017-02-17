@@ -3,6 +3,16 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 use xj\uploadify\Uploadify;
 use yii\web\JsExpression;
+
+$this->params['breadcrumbs'][] = [
+    'label'=>'品牌管理',
+    'url'=>'index'
+];
+$this->params['breadcrumbs'][] = [
+    'label'=>$model->isNewRecord?'品牌添加':'品牌修改'
+];
+
+
 $form = ActiveForm::begin();
 echo $form->field($model,'name')->textInput();
 
@@ -39,7 +49,6 @@ EOF
     ]
 ]);
 
-//echo $form->field($model,'logo')->label(false)->hiddenInput(['id'=>'logo-url']);
 echo Html::hiddenInput('logo',$model->logo,['id'=>'logo-url']);
 
 
