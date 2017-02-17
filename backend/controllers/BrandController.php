@@ -97,17 +97,29 @@ class BrandController extends Controller
     {
         //获取品牌对象
         $model = Brand::findOne($id);
-
+        //判断是否提交
+        if(\Yii::$app->request->isPost){
+            //获取数据
+            $model->load(\Yii::$app->request->post());
+            //验证数据,执行保存
+            if($model->save()){
+                //跳转
+                $this->redirect(['index']);
+            }
+        }
         //渲染视图
         return $this->render('add',[
             'model'=>$model,
         ]);
     }
 
+    /**
+     * 删除品牌，逻辑删除
+     * @param $id
+     */
     public function actionDelete($id)
     {
         //获取品牌修改字段
-
         $model = Brand::findOne($id);
         $model->status = -1;
         if($model->save()){
