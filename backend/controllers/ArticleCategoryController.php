@@ -40,14 +40,14 @@ class ArticleCategoryController extends \yii\web\Controller
         $model = ArticleCategory::findOne($id);
         //判断是否提交
         if(\Yii::$app->request->isPost){
-            //获取数据
-            $model->load(\Yii::$app->request->post());
-            //验证数据,执行保存
-            if($model->save()){
-                //跳转
-                return $this->redirect(['index']);
-            }
+        //获取数据
+        $model->load(\Yii::$app->request->post());
+        //验证数据,执行保存
+        if($model->save()){
+            //跳转
+            return $this->redirect(['index']);
         }
+    }
         return $this->render('add',[
             'model'=>$model
         ]);

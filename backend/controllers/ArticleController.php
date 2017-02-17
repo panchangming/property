@@ -57,11 +57,12 @@ class ArticleController extends \yii\web\Controller
         if(\Yii::$app->request->isPost){
             //获取数据
             $articleModel->load(\Yii::$app->request->post());
+
             $articleDetailModel->load(\Yii::$app->request->post());
             //验证数据,执行添加
-            if($rst = $articleModel->save()){
+            if($articleModel->save()){
                 //基本信息保存完毕，还需要保存关联数据。
-                if($articleDetailModel->updateAll($articleDetailModel->getAttributes(),['article_id'=>$id])){
+                if($articleDetailModel->updateAll($articleDetailModel->getAttributes(),['article_id'=>$id]) !== false){
                     //跳转
                     return $this->redirect(['index']);
                 }

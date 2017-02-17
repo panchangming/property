@@ -42,10 +42,11 @@ class UploadController extends  Controller
                 'afterSave' => function (UploadAction $action) {
                     //使用七牛云存储保存用户上传的图片
                     $savePath = $action->getSavePath();
-                    $ak = 'qJHe4wo24q6X6AWSXsv-syl8PkhHjo6i5WXc-to5';
-                    $sk = 'KBYoPnqTbgX4a65rXNI9f-6_kCKwwnHMSnLOGLNk';
-                    $domain = 'http://olhxdl0ds.bkt.clouddn.com/';
-                    $bucket = 'php1107';
+                    $qiniuSetting = \Yii::$app->params['qiniu'];
+                    $ak =$qiniuSetting['ak'];
+                    $sk = $qiniuSetting['sk'];
+                    $domain = $qiniuSetting['domain'];
+                    $bucket = $qiniuSetting['bucket'];
                     $qiniu = new Qiniu($ak, $sk,$domain, $bucket);
                     $key = $action->getFilename();
                     $qiniu->uploadFile($savePath,$key);

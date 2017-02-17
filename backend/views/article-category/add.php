@@ -3,7 +3,7 @@
 
 $this->params['breadcrumbs'][] = [
     'label'=>'分类管理',
-    'url'=>'index'
+    'url'=>['index']
 ];
 $this->params['breadcrumbs'][] = [
     'label'=>$model->isNewRecord?'分类添加':'分类修改'
