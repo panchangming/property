@@ -3,26 +3,26 @@
 namespace backend\models;
 
 use Yii;
-use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "article_category".
+ * This is the model class for table "article".
  *
  * @property integer $id
  * @property string $name
+ * @property string $article_category_id
  * @property string $intro
  * @property integer $status
  * @property string $sort
- * @property string $is_help
+ * @property string $inputtime
  */
-class ArticleCategory extends \yii\db\ActiveRecord
+class Article extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'article_category';
+        return 'article';
     }
 
     /**
@@ -32,7 +32,7 @@ class ArticleCategory extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
-            [['status', 'sort', 'is_help'], 'integer'],
+            [['article_category_id', 'status', 'sort', 'inputtime'], 'integer'],
             [['name'], 'string', 'max' => 20],
             [['intro'], 'string', 'max' => 255],
         ];
@@ -45,21 +45,12 @@ class ArticleCategory extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => '分类名称',
-            'intro' => '分类简介',
+            'name' => '标题',
+            'article_category_id' => '文章分类',
+            'intro' => '简介',
             'status' => '状态',
             'sort' => '排序',
-            'is_help' => '是否帮助分类',
+            'inputtime' => '创建时间',
         ];
-    }
-
-    public static function getArticleCategories()
-    {
-        return ArrayHelper::map(self::find()->where(['status'=>1])->all(),'id','name');
-    }
-
-    public static function getArticleCategoryById($id)
-    {
-        return self::find()->where(['id'=>$id])->select('name')->scalar();
     }
 }

@@ -49,7 +49,7 @@ EOF
     ]
 ]);
 
-echo Html::hiddenInput('logo',$model->logo,['id'=>'logo-url']);
+echo Html::hiddenInput('Brand[logo]',$model->logo,['id'=>'logo-url']);
 
 
 

@@ -17,7 +17,7 @@ class Brand extends  ActiveRecord
         return [
             [['name','status'],'required'],
             [['sort','status'],'integer'],
-            ['intro','safe'],
+            [['intro','logo'],'safe'],
         ];
     }
 
