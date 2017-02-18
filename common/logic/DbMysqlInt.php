@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * MySQL DB connection interface
  *
@@ -9,9 +9,9 @@
  * @namespace MediaCore\Lib\Db\connectors
  * @copyright Copyright (c), 2012
  */
-namespace MediaCore\Lib\Db\connectors;
+namespace common\logic;
 
-interface  DbMysql {
+interface  DbMysqlInt {
 	/**
 	 * DB connect
 	 *
@@ -49,7 +49,7 @@ interface  DbMysql {
 	 *
 	 * @return resource|bool query result
 	 */
-	public function query($sql, array $args = array());
+	public function query($sql, $args = array());
 
 	/**
 	 * Insert query method
@@ -60,7 +60,7 @@ interface  DbMysql {
 	 *
 	 * @return int|false last insert id
 	 */
-	public function insert($sql, array $args = array());
+	public function insert($sql, $args = array());
 
 	/**
 	 * Update query method
@@ -104,7 +104,7 @@ interface  DbMysql {
 	 *
 	 * @return array associated data array
 	 */
-	public function getRow($sql, array $args = array());
+	public function getRow($sql, $args = array());
 
 	/**
 	 * Get first column of query result

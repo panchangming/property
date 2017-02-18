@@ -26,12 +26,6 @@ echo $form->field($model, 'logo')->widget(Uploadify::className(), [
         'height'          => 40,
         'buttonText'      => '选择文件',
         'buttonClass'=>'bg-primary',
-        'onUploadError'   => new JsExpression(<<<EOF
-function(file, errorCode, errorMsg, errorString) {
-    console.log('The file ' + file.name + ' could not be uploaded: ' + errorString + errorCode + errorMsg);
-}
-EOF
-        ),
         'onUploadSuccess' => new JsExpression(<<<EOF
 function(file, data, response) {
     data = JSON.parse(data);
