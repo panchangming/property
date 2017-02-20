@@ -63,7 +63,7 @@ class GoodsCategory extends \yii\db\ActiveRecord
      */
     public static function getCategories()
     {
-        return json_encode(ArrayHelper::toArray(self::find()->orderBy('lft')->all()));
+        return ArrayHelper::toArray(self::find()->orderBy('lft')->all());
     }
 
     /**

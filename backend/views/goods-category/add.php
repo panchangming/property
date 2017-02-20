@@ -27,6 +27,8 @@ AppAsset::addCss($this,'@web/ext/ztree/css/demo.css?v=1');
 AppAsset::addCss($this,'@web/ext/ztree/css/zTreeStyle/zTreeStyle.css');
 AppAsset::addScript($this,'@web/ext/ztree/js/jquery.ztree.core.min.js');
 $parentNodes = GoodsCategory::getCategories();
+array_unshift($parentNodes,['id'=>0,'parent_id'=>null,'name'=>'顶级分类']);
+$parentNodes = json_encode($parentNodes);
 
 $jsStr = <<<EOF
 var setting = {
