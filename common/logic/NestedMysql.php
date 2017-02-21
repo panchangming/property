@@ -181,8 +181,11 @@ class NestedMysql implements DbMysqlInt
      *
      * @return string field value
      */
-    public function getOne($sql, array $args = array())
-    {
+    public function getOne($sql, $args = array()) {
+        $args = func_get_args();
+
+        $sql = $this->_buildSql($args);
+        return \Yii::$app->db->createCommand($sql)->queryScalar();
         // TODO: Implement getOne() method.
     }
 }

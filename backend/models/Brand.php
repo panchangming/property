@@ -9,6 +9,7 @@
 namespace backend\models;
 
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 
 class Brand extends  ActiveRecord
 {
@@ -31,4 +32,9 @@ class Brand extends  ActiveRecord
             'intro'=>'简介'
         ];
     }
+
+    public static function getBrands() {
+        return ArrayHelper::map(self::find()->orderBy('sort')->where(['status' => 1])->all(), 'id', 'name');
+    }
+
 }

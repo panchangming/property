@@ -126,5 +126,5 @@ interface  DbMysqlInt {
 	 *
 	 * @return string field value
 	 */
-	public function getOne($sql, array $args = array());
+	public function getOne($sql, $args = array());
 }
