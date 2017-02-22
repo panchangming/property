@@ -93,12 +93,13 @@ EOF
         ),
     ]
 ]);
-
 $str = '';
-foreach ($goodsGalleryModels as $gallery) {
+if (!$goodsModel->isNewRecord) {
+    foreach ($goodsGalleryModels as $gallery) {
         $str .= '<div style="margin-bottom:10px"><img src="' . $gallery->path . '" style="max-width:300px"/><input type="hidden" name="path[]" value="' . $gallery->path . '"/><a href="javascript:;" onClick="$(this).parent().remove();">删除</a></div>';
     }
-    echo Html::tag('div', $str, ['id' => 'pathes', 'style' => 'margin-bottom:1em']);
+}
+echo Html::tag('div', $str, ['id' => 'pathes', 'style' => 'margin-bottom:1em']);
 
 
 echo Html::submitInput('提交', ['class' => 'btn btn-success', 'style' => 'margin-right:1em']);
@@ -115,7 +116,8 @@ AppAsset::addScript($this, '@web/ext/ztree/js/jquery.ztree.core.min.js');
 AppAsset::addScript($this, '@web/ext/layer/layer.js');
 
 $goodsCategories = json_encode(GoodsCategory::getCategories());
-$jsStr           = <<<EOF
+$jsStr = <<<EOF
+
 var setting = {
             data: {
                     simpleData: {
@@ -133,17 +135,27 @@ var setting = {
         };
 
 var zNodes = $goodsCategories;
-
+        var ztreeObj;
 $(document).ready(function(){
-        var ztreeObj = $.fn.zTree.init($("#goods_category_ids"), setting, zNodes);
+        ztreeObj = $.fn.zTree.init($("#goods_category_ids"), setting, zNodes);
         ztreeObj.expandAll(true);
-        
+        });
+EOF;
+if ($goodsModel->goods_category_id) {
+    $jsStr .= <<<EOF
+            $(document).ready(function(){
             var node =  ztreeObj.getNodesByParam("id", $goodsModel->goods_category_id, null)[0];
             ztreeObj.selectNode(node);
             $('#goods-goods_category_name').val(node.name);
             console.debug(node)
 });
 EOF;
+}
+
+
+
+        
+            
 
 
 $this->registerJs($jsStr, View::POS_END);

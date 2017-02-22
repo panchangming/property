@@ -7,13 +7,14 @@ $params = array_merge(
 );
 
 return [
-    'id' => 'app-backend',
+    'id'                  => 'app-backend',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
     'modules' => [],
     'layout'=>'common',
-    'language'=>'zh-CN',
+    'language'            => 'zh-CN',
+    'homeUrl'             => ['goods/index'],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',

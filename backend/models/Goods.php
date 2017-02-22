@@ -65,16 +65,15 @@ class Goods extends \yii\db\ActiveRecord {
         ];
     }
 
-    public function add() {
-        //商品基本信息
-        $this->isNewRecord = true;
-
-        //生成货号
-        $goodsDayCount     = new GoodsDayCount();
-        $count             = $goodsDayCount->getDayCount();
-        $this->sn          = date('Ymd') . str_pad($count, 5, '0', STR_PAD_LEFT);
-        $this->save();
-        return $this->primaryKey;
+    public function beforeSave($insert) {
+        if ($this->isNewRecord) {
+            //生成货号
+            $goodsDayCount = new GoodsDayCount();
+            $count         = $goodsDayCount->getDayCount();
+            $this->sn      = date('Ymd') . str_pad($count, 5, '0', STR_PAD_LEFT);
+        }
+        return parent::beforeSave($insert);
     }
+
 
 }

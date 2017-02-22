@@ -25,7 +25,10 @@ class GoodsController extends \yii\web\Controller {
 
 
             //保存基本信息
-            $goodsModel->add();
+            if ($goodsModel->validate()) {
+                $goodsModel->save(FALSE);
+            }
+
             //保存详细信息
             $goodsIntroModel->goods_id = $goodsModel->id;
             $goodsIntroModel->add();
@@ -35,10 +38,10 @@ class GoodsController extends \yii\web\Controller {
             if ($pathes) {
                 $goodsGalleryModel->addAll($pathes, $goodsModel->id);
             }
-            return $this->redirect(['index']);
+//            return $this->redirect(['index']);
         }
 
-        return $this->render('add', [
+        return $this->render('edit', [
                     'goodsModel'        => $goodsModel,
                     'goodsIntroModel'   => $goodsIntroModel,
                     'goodsGalleryModel' => $goodsGalleryModel,
@@ -89,18 +92,20 @@ class GoodsController extends \yii\web\Controller {
         //获取查询条件
         $searchData = \Yii::$app->request->get($searchModel->formName());
         //给模型赋值
-        foreach ($searchData as $key => $value) {
-            $searchModel->$key = $value;
-        }
+        if ($searchData) {
+            foreach ($searchData as $key => $value) {
+                $searchModel->$key = $value;
+            }
 
-        if ($searchModel->name) {
-            $query->andWhere(['like', 'name', $searchModel->name]);
-        }
-        if ($searchModel->minPrice) {
-            $query->andWhere(['>', 'shop_price', $searchModel->minPrice]);
-        }
-        if ($searchModel->maxPrice) {
-            $query->andWhere(['<', 'shop_price', $searchModel->maxPrice]);
+            if ($searchModel->name) {
+                $query->andWhere(['like', 'name', $searchModel->name]);
+            }
+            if ($searchModel->minPrice) {
+                $query->andWhere(['>', 'shop_price', $searchModel->minPrice]);
+            }
+            if ($searchModel->maxPrice) {
+                $query->andWhere(['<', 'shop_price', $searchModel->maxPrice]);
+            }
         }
         $list = $query->all();
         return $this->render('index', ['list' => $list, 'searchModel' => $searchModel]);

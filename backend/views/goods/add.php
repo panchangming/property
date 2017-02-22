@@ -14,16 +14,14 @@ use backend\models\Brand;
 $form = ActiveForm::begin();
 echo $form->field($goodsModel, 'name');
 echo $form->field($goodsModel, 'brand_id')->dropDownList(Brand::getBrands(), ['prompt' => '请选择品牌']);
-echo $form->field($goodsModel, 'goods_category_id')->label(false)->hiddenInput(['id' => 'goods-category-id']);
-?>
-
-<div class="form-group field-goodscategory-intro">
-    <label class="control-label" for="goods_category_ids">商品分类</label>
-    <input type="text" id="goods-goods_category_name" class="form-control"  aria-required="true" readonly="true">
+//echo $form->field($goodsModel, 'goods_category_id')->label(false)->hiddenInput(['id' => 'goods-category-id']);
+echo $form->field($goodsModel, 'goods_category_id', ['template' => '<div class="form-group field-goodscategory-intro">
+    {label}
+    {input}
     <ul id="goods_category_ids" class="ztree"></ul>
-    <p class="help-block help-block-error"></p>
-</div>
-<?php
+    {error}{hint}
+    </div>
+    '])->textInput(['id' => 'goods-goods_category_id', 'style' => 'display:none']);
 echo $form->field($goodsModel, 'logo')->widget(Uploadify::className(), [
     'url'       => Url::to(['upload/s-upload']),
     'csrf'      => true,
@@ -60,7 +58,7 @@ echo $form->field($goodsModel, 'shop_price');
 echo $form->field($goodsModel, 'stock');
 echo $form->field($goodsModel, 'sort');
 echo $form->field($goodsModel, 'is_on_sale')->dropDownList(['下架', '在售'], ['prompt' => '请选择']);
-echo $form->field($goodsIntroModel, 'content')->textarea();
+//echo $form->field($goodsIntroModel, 'content')->textarea();
 ?>
 <div class="form-group field-goodsgallery-path required">
     <label class="control-label" for="goodsgallery-path">相册</label>
@@ -125,7 +123,7 @@ var setting = {
                 onClick: function(event,treeEle,node){
                     console.debug(node);
                     $('#goods-category-id').val(node.id);
-                    $('#goods-goods_category_name').val(node.name);
+                    $('#goods-goods_category_id').val(node.id);
                 }
             }
         };
