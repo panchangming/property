@@ -17,22 +17,22 @@ echo $form->field($goodsModel, 'brand_id')->dropDownList(Brand::getBrands(), ['p
 echo $form->field($goodsModel, 'goods_category_id')->label(false)->hiddenInput(['id' => 'goods-category-id']);
 ?>
 
-<div class="form-group field-goodscategory-intro">
-    <label class="control-label" for="goods_category_ids">商品分类</label>
-    <input type="text" id="goods-goods_category_name" class="form-control"  aria-required="true" readonly="true">
-    <ul id="goods_category_ids" class="ztree"></ul>
-    <p class="help-block help-block-error"></p>
-</div>
+    <div class="form-group field-goodscategory-intro">
+        <label class="control-label" for="goods_category_ids">商品分类</label>
+        <input type="text" id="goods-goods_category_name" class="form-control" aria-required="true" readonly="true">
+        <ul id="goods_category_ids" class="ztree"></ul>
+        <p class="help-block help-block-error"></p>
+    </div>
 <?php
 echo $form->field($goodsModel, 'logo')->widget(Uploadify::className(), [
-    'url'       => Url::to(['upload/s-upload']),
-    'csrf'      => true,
+    'url' => Url::to(['upload/s-upload']),
+    'csrf' => true,
     'renderTag' => true,
     'jsOptions' => [
-        'width'           => 120,
-        'height'          => 40,
-        'buttonText'      => '选择文件',
-        'buttonClass'     => 'bg-primary',
+        'width' => 120,
+        'height' => 40,
+        'buttonText' => '选择文件',
+        'buttonClass' => 'bg-primary',
         'onUploadSuccess' => new JsExpression(<<<EOF
 function(file, data, response) {
     data = JSON.parse(data);
@@ -59,23 +59,48 @@ echo $form->field($goodsModel, 'shop_price');
 echo $form->field($goodsModel, 'stock');
 echo $form->field($goodsModel, 'sort');
 echo $form->field($goodsModel, 'is_on_sale')->dropDownList(['下架', '在售'], ['prompt' => '请选择']);
-echo $form->field($goodsIntroModel, 'content')->textarea();
+echo $form->field($goodsModel,'goods_status')->checkboxList([1=>'新品',2=>'热销',4=>'精品']);
+//echo $form->field($goodsIntroModel, 'content')->textarea();
+echo $form->field($goodsIntroModel, 'content')->widget(\kucha\ueditor\UEditor::className(), [
+    'clientOptions' => [
+        //编辑区域大小
+        'initialFrameHeight' => '200',
+        //设置语言
+        'lang' => 'zh-cn', //中文为 zh-cn
+        //定制菜单
+        'toolbars' => [
+            [
+                'fullscreen', 'source', 'undo', 'redo', '|',
+                'fontsize',
+                'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'removeformat',
+                'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|',
+                'forecolor', 'backcolor', '|',
+                'lineheight', '|',
+                'indent', '|',
+                'simpleupload', //单图上传
+                'insertimage', //多图上传
+            ],
+        ]
+    ]
+]);
+
+
 ?>
-<div class="form-group field-goodsgallery-path required">
-    <label class="control-label" for="goodsgallery-path">相册</label>
-    <input type="file" id="uploadify-box"/>
-</div>
+    <div class="form-group field-goodsgallery-path required">
+        <label class="control-label" for="goodsgallery-path">相册</label>
+        <input type="file" id="uploadify-box"/>
+    </div>
 <?php
 echo $form->field($goodsGalleryModel, 'path')->label(false)->widget(Uploadify::className(), [
-    'url'       => Url::to(['upload/s-upload']),
-    'id'        => 'uploadify-box',
-    'csrf'      => true,
+    'url' => Url::to(['upload/s-upload']),
+    'id' => 'uploadify-box',
+    'csrf' => true,
     'renderTag' => false,
     'jsOptions' => [
-        'width'           => 120,
-        'height'          => 40,
-        'buttonText'      => '选择文件',
-        'buttonClass'     => 'bg-primary',
+        'width' => 120,
+        'height' => 40,
+        'buttonText' => '选择文件',
+        'buttonClass' => 'bg-primary',
         'onUploadSuccess' => new JsExpression(<<<EOF
 function(file, data, response) {
     data = JSON.parse(data);
@@ -107,7 +132,6 @@ echo Html::resetInput('重置', ['class' => 'btn btn-danger']);
 
 
 ActiveForm::end();
-
 
 
 AppAsset::addCss($this, '@web/ext/ztree/css/demo.css?v=1');
@@ -151,11 +175,6 @@ if ($goodsModel->goods_category_id) {
 });
 EOF;
 }
-
-
-
-        
-            
 
 
 $this->registerJs($jsStr, View::POS_END);

@@ -18,6 +18,7 @@ use Yii;
  * @property integer $stock
  * @property integer $is_on_sale
  * @property integer $status
+ * @property integer $goods_status
  * @property integer $sort
  * @property integer $inputtime
  */
@@ -35,12 +36,12 @@ class Goods extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-                [['name', 'sn', 'goods_category_id', 'brand_id', 'market_price', 'shop_price', 'stock'], 'required'],
+                [['name', 'goods_category_id', 'brand_id', 'market_price', 'shop_price', 'stock'], 'required'],
                 [['goods_category_id', 'brand_id', 'stock', 'is_on_sale', 'status', 'sort', 'inputtime'], 'integer'],
                 [['market_price', 'shop_price'], 'number'],
-                [['name', 'sn'], 'string', 'max' => 20],
+                [['name'], 'string', 'max' => 20],
                 [['logo'], 'string', 'max' => 255],
-                [['sn'], 'unique'],
+            ['goods_status','safe']
         ];
     }
 
@@ -61,18 +62,54 @@ class Goods extends \yii\db\ActiveRecord {
             'is_on_sale'        => '是否在售',
             'status'            => '状态',
             'sort'              => '排序',
+            'goods_status'              => '促销类型',
             'inputtime'         => '创建时间',
         ];
     }
 
+    /**
+     * beforeSave会在save方法之前自动执行
+     * @param bool $insert
+     * @return bool
+     */
     public function beforeSave($insert) {
-        if ($this->isNewRecord) {
-            //生成货号
-            $goodsDayCount = new GoodsDayCount();
-            $count         = $goodsDayCount->getDayCount();
-            $this->sn      = date('Ymd') . str_pad($count, 5, '0', STR_PAD_LEFT);
+        if(parent::beforeSave($insert)){
+            if ($insert) {
+                //生成货号
+                $goodsDayCount = new GoodsDayCount();
+                $count         = $goodsDayCount->getDayCount();
+                $this->sn      = date('Ymd') . str_pad($count, 5, '0', STR_PAD_LEFT);
+                $this->inputtime = time();
+            }
+            if($this->goods_status){
+                $this->goods_status = array_sum($this->goods_status);
+            }
+            return true;
+        }else{
+            return false;
         }
-        return parent::beforeSave($insert);
+    }
+
+    /**
+     * 通过id获取商品信息，并且将商品促销类型转换成数组。
+     * @param $id 商品id。
+     * @return static 商品对象。
+     */
+    public static function getGoodsInfo($id)
+    {
+        $info = self::findOne($id);
+        $goods_status = [];
+        if($info->goods_status & 1){
+            array_push($goods_status,1);
+        }
+        if($info->goods_status & 2){
+            array_push($goods_status,2);
+        }
+        if($info->goods_status & 4){
+            array_push($goods_status,4);
+        }
+        $info->goods_status = $goods_status;
+        return $info;
     }
 
 
