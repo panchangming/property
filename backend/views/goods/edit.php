@@ -18,11 +18,11 @@ echo $form->field($goodsModel, 'goods_category_id')->label(false)->hiddenInput([
 ?>
 
     <div class="form-group field-goodscategory-intro">
-        <label class="control-label" for="goods_category_ids">商品分类</label>
-        <input type="text" id="goods-goods_category_name" class="form-control" aria-required="true" readonly="true">
-        <ul id="goods_category_ids" class="ztree"></ul>
-        <p class="help-block help-block-error"></p>
-    </div>
+    <label class="control-label" for="goods_category_ids">商品分类</label>
+    <input type="text" id="goods-goods_category_name" class="form-control" aria-required="true" readonly="true">
+    <ul id="goods_category_ids" class="ztree"></ul>
+    <p class="help-block help-block-error"></p>
+</div>
 <?php
 echo $form->field($goodsModel, 'logo')->widget(Uploadify::className(), [
     'url' => Url::to(['upload/s-upload']),

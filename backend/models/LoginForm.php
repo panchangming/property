@@ -20,10 +20,13 @@ class LoginForm extends Model {
     public $username;
     public $password;
     public $rememberMe = true;
+    public $verify;
 
     public function rules() {
         return [
-                [['username', 'password'], 'required'],
+                [['username', 'password','verify'], 'required'],
+            ['rememberMe','safe'],
+            ['verify','captcha','captchaAction'=>'admin/captcha'],
         ];
     }
 
@@ -31,11 +34,11 @@ class LoginForm extends Model {
         return [
             'username'   => '用户名',
             'password'   => '密码',
+            'verify'=>'验证码',
         ];
     }
 
     public function login() {
-        
         if (!$this->validate()) {
             return false;
         }
@@ -50,7 +53,7 @@ class LoginForm extends Model {
         }
 
         if (\Yii::$app->security->validatePassword($this->password, $model->password_hash)) {
-            return \Yii::$app->user->login($model, $this->rememberMe ? 7 * 3600 : 0);
+            return \Yii::$app->user->login($model, $this->rememberMe ? 7*24 * 3600 : 0);
         } else {
             $this->addError('username', '用户名或密码不匹配');
             return false;

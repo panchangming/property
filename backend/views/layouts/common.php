@@ -9,6 +9,7 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use common\widgets\Alert;
+use yii\helpers\Url;
 
 AppAsset::register($this);
 ?>
@@ -108,13 +109,21 @@ AppAsset::register($this);
                     <li>
                         <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                             <img src="/images/photos/user-avatar.png" alt="" />
-                            涛哥
+                            <?php
+                            if(Yii::$app->user->isGuest){
+                                echo Html::a('请登录',['admin/login']);
+                            }else{
+                                echo Yii::$app->user->identity->username;
+                            }
+
+
+                            ?>
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
                             <li><a href="#"><i class="fa fa-user"></i>  个人资料</a></li>
                             <li><a href="#"><i class="fa fa-cog"></i>  修改密码</a></li>
-                            <li><a href="#"><i class="fa fa-sign-out"></i> 退出</a></li>
+                            <li><a href="<?php echo Url::to(['admin/logout']);?>"><i class="fa fa-sign-out"></i> 退出</a></li>
                         </ul>
                     </li>
 

@@ -16,6 +16,8 @@ $form = ActiveForm::begin();
 echo $form->field($model,'name');
 echo $form->field($model,'intro');
 echo $form->field($model,'sort');
+echo $form->field($model,'is_help')->dropDownList(\backend\models\ArticleCategory::$is_helps,['prompt'=>'请选择是否帮助']);
+
 echo $form->field($model,'status')->dropDownList(['隐藏','正常'],['prompt'=>'请选择状态']);
 echo Html::submitInput('提交',['class'=>'btn btn-primary','style'=>'margin-right:1em;']);
 echo Html::resetInput('重置',['class'=>'btn btn-danger']);

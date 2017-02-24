@@ -12,6 +12,11 @@ use yii\helpers\Url;
 $form = ActiveForm::begin();
 echo $form->field($model, 'username');
 echo $form->field($model, 'password');
+echo $form->field($model, 'verify')->widget(\yii\captcha\Captcha::className(),[
+    'captchaAction'=>'admin/captcha',
+    'template'=>'<br />{image}{input}',
+]);
 echo $form->field($model, 'rememberMe')->checkbox();
+
 echo Html::submitInput('登录', ['class' => 'btn btn-success']);
 ActiveForm::end();

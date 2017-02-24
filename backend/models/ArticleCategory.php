@@ -17,6 +17,13 @@ use yii\helpers\ArrayHelper;
  */
 class ArticleCategory extends \yii\db\ActiveRecord
 {
+//    public $status = 1;//默认状态是启用
+    const HELP = 1;
+    const NORMAL = 0;
+    public static $is_helps=[
+        self::HELP=>'是',
+        self::NORMAL=>'否',
+    ];
     /**
      * @inheritdoc
      */

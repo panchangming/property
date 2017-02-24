@@ -10,6 +10,7 @@ class ArticleCategoryController extends \yii\web\Controller
     public function actionAdd()
     {
         $model = new ArticleCategory();
+        $model->loadDefaultValues();
         //判断是否提交
         if(\Yii::$app->request->isPost){
             //获取数据
@@ -55,7 +56,7 @@ class ArticleCategoryController extends \yii\web\Controller
 
     public function actionIndex()
     {
-        $query = ArticleCategory::find();
+        $query = ArticleCategory::find()->orderBy('sort');
         $pages = new Pagination(['totalCount'=>$query->count()]);
         $list = $query->offset($pages->offset)->limit($pages->limit)->all();
         return $this->render('index',[

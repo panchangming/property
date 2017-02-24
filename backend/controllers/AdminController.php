@@ -18,7 +18,16 @@ use backend\models\Admin;
  * @author kunx <kunx-edu@qq.com>
  */
 class AdminController extends Controller {
-    
+    public function actions()
+    {
+        return [
+            'captcha' => [
+                'class' => 'yii\captcha\CaptchaAction',
+                'minLength'=>3,
+                'maxLength'=>3,
+            ],
+        ];
+    }
     /**
      * 添加管理员
      * @return type
@@ -42,8 +51,9 @@ class AdminController extends Controller {
         }
 
         $model = new LoginForm;
+
         if ($model->load(\Yii::$app->request->post()) && $model->login()) {
-            return $this->redirect(['goods/index']);
+            return $this->goHome();
         }
         return $this->render('login', ['model' => $model]);
     }

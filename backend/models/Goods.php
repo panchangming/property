@@ -23,7 +23,11 @@ use Yii;
  * @property integer $inputtime
  */
 class Goods extends \yii\db\ActiveRecord {
+    const GS_NEW = 1;
 
+    public static $goods_statuses = [
+        self::GS_NEW=>'新品',
+    ];
     /**
      * @inheritdoc
      */
