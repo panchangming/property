@@ -7,15 +7,18 @@ use backend\models\GoodsIntro;
 use backend\models\GoodsGallery;
 use backend\models\GoodsDayCount;
 use backend\models\GoodsSearchForm;
+use yii\data\Pagination;
+use yii\web\Controller;
 
-class GoodsController extends \yii\web\Controller {
+class GoodsController extends MembersController
+{
     public function actions()
     {
         return [
             'upload' => [
                 'class' => 'kucha\ueditor\UEditorAction',
-                'config'=>[
-                    "imageUrlPrefix"  => "http://admin.jx.com",//图片访问路径前缀
+                'config' => [
+                    "imageUrlPrefix" => "http://admin.jx.com",
                 ],
             ]
         ];
@@ -24,12 +27,13 @@ class GoodsController extends \yii\web\Controller {
     /**
      * 创建商品.
      *
-     * 举例：促销，简单的解决方案是使用集合或者二进制位来表示有限的促销类型：1表示新品  2表示热销  4表示精品
+     *
      * @return object
      */
-    public function actionAdd() {
-        $goodsModel        = new Goods;
-        $goodsIntroModel   = new GoodsIntro();
+    public function actionAdd()
+    {
+        $goodsModel = new Goods;
+        $goodsIntroModel = new GoodsIntro();
         $goodsGalleryModel = new GoodsGallery();
 
         if (\Yii::$app->request->isPost) {
@@ -50,33 +54,35 @@ class GoodsController extends \yii\web\Controller {
             //保存商品相册
             $pathes = \Yii::$app->request->post('path');
             if ($pathes) {
-                $flag =$flag && $goodsGalleryModel->addAll($pathes, $goodsModel->id);
+                $flag = $flag && $goodsGalleryModel->addAll($pathes, $goodsModel->id);
             }
-            if($flag){
+            if ($flag) {
                 $t->commit();
-            }else{
+            } else {
                 $t->rollBack();
             }
 
             return $this->redirect(['index']);
         }
 
-        return $this->render('edit', [
-                    'goodsModel'        => $goodsModel,
-                    'goodsIntroModel'   => $goodsIntroModel,
-                    'goodsGalleryModel' => $goodsGalleryModel,
+        return $this->render('add', [
+            'goodsModel' => $goodsModel,
+            'goodsIntroModel' => $goodsIntroModel,
+            'goodsGalleryModel' => $goodsGalleryModel,
         ]);
     }
 
-    public function actionDelete($id) {
+    public function actionDelete($id)
+    {
         Goods::updateAll(['status' => 0], ['id' => $id]);
         return $this->redirect(['index']);
     }
 
-    public function actionEdit($id) {
-        $goodsModel         = Goods::getGoodsInfo($id);
-        $goodsIntroModel    = GoodsIntro::find()->where(['goods_id' => $id])->one();
-        $goodsGalleryModel  = new GoodsGallery();
+    public function actionEdit($id)
+    {
+        $goodsModel = Goods::getGoodsInfo($id);
+        $goodsIntroModel = GoodsIntro::find()->where(['goods_id' => $id])->one();
+        $goodsGalleryModel = new GoodsGallery();
         $goodsGalleryModels = GoodsGallery::findAll(['goods_id' => $id]);
 
         if (\Yii::$app->request->isPost) {
@@ -98,17 +104,17 @@ class GoodsController extends \yii\web\Controller {
             }
             return $this->redirect(['index']);
         }
-        return $this->render('edit', [
-                    'goodsModel'         => $goodsModel,
-                    'goodsIntroModel'    => $goodsIntroModel,
-                    'goodsGalleryModel'  => $goodsGalleryModel,
-                    'goodsGalleryModels' => $goodsGalleryModels,
+        return $this->render('add', [
+            'goodsModel' => $goodsModel,
+            'goodsIntroModel' => $goodsIntroModel,
+            'goodsGalleryModel' => $goodsGalleryModel,
+            'goodsGalleryModels' => $goodsGalleryModels,
         ]);
     }
 
-    public function actionIndex() {
+    public function actionIndex()
+    {
         $searchModel = new GoodsSearchForm();
-        $query       = Goods::find()->where(['status' => 1])->orderBy('sort');
 
         //获取查询条件
         $searchData = \Yii::$app->request->get($searchModel->formName());
@@ -117,19 +123,40 @@ class GoodsController extends \yii\web\Controller {
             foreach ($searchData as $key => $value) {
                 $searchModel->$key = $value;
             }
+            $searchModel->name;
+            $searchModel->minPrice;
+            $searchModel->maxPrice;
 
-            if ($searchModel->name) {
-                $query->andWhere(['like', 'name', $searchModel->name]);
-            }
-            if ($searchModel->minPrice) {
-                $query->andWhere(['>', 'shop_price', $searchModel->minPrice]);
-            }
-            if ($searchModel->maxPrice) {
-                $query->andWhere(['<', 'shop_price', $searchModel->maxPrice]);
-            }
         }
-        $list = $query->all();
-        return $this->render('index', ['list' => $list, 'searchModel' => $searchModel]);
-    }
+        $query = Goods::find();
+        $data = \Yii::$app->request->get();
+        if (!empty($data['GoodsSearchForm']['name'])) {
+          $query->andWhere(['like', 'name', $searchModel->name]);
 
+
+        }
+        if (!empty($data['GoodsSearchForm']['minPrice'])) {
+            $query->andWhere(['>', 'shop_price', $searchModel->minPrice]);
+        }
+        if (!empty($data['GoodsSearchForm']['maxPrice'])) {
+            $query->andWhere(['<', 'shop_price', $searchModel->maxPrice]);
+        }
+         $count=$query->count();
+
+        $size = 5;
+        $pager = new Pagination(['totalCount' => $count, 'PageSize' => $size]);
+        $model = $query->offset($pager->offset)->limit($pager->limit)->all();
+        return $this->render('index', ['model' => $model, 'searchModel' => $searchModel, 'pager' => $pager]);
+
+    }
+    public  function  actionPhoto($id){
+        $photo=GoodsGallery::find()->where(['goods_id'=>$id])->select('path')->all();
+        //var_dump($photo);exit;
+        return $this->render('photo',['photo'=>$photo]);
+    }
+    public  function  actionShow($id){
+        $model=GoodsIntro::findOne(['goods_id'=>$id]);
+        //var_dump($model);exit;
+        return $this->render('show',['model'=>$model]);
+    }
 }

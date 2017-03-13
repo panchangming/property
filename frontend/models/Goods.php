@@ -14,7 +14,8 @@ use yii\db\ActiveRecord;
 
 class Goods extends ActiveRecord
 {
-
+    public $num
+    ;
     public static function getGoodsListByGoodsStatus($status)
     {
         //`goods_status &` 1
@@ -34,5 +35,9 @@ class Goods extends ActiveRecord
     public function getBrand()
     {
         return self::hasOne(Brand::className(),['id'=>'brand_id'])->select('name')->scalar();
+    }
+    public static function  getGoodsAll($goods_id){
+        $goods=self::findOne(['id'=>$goods_id]);
+        return $goods;
     }
 }

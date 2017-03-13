@@ -10,9 +10,10 @@ namespace backend\controllers;
 
 
 use backend\models\Brand;
+use backend\models\MembersController;
 use yii\web\Controller;
 
-class BrandController extends Controller
+class BrandController extends MembersController
 {
     /**
      * 列表页面

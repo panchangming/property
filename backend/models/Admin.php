@@ -3,6 +3,7 @@
 namespace backend\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "user".
@@ -84,8 +85,24 @@ class Admin extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface {
         return static::findOne(['auth_key' => $token, 'status' => self::STATUS_ACTIVE]);
     }
 
-    public function findByUsername($username) {
-        
+    public function accessRole($roleNames){
+        $authManager=Yii::$app->authManager;
+        $authManager->revokeAll($this->id);
+        //清除所有关联角色
+        if(is_array($roleNames)){
+                //关联所有角色
+            foreach($roleNames as $roleName){
+                $role=$authManager->getRole($roleName);
+                $authManager->assign($role,$this->id);
+            }
+        }
+          return true;
     }
+    //获取角色转换为数组
+     public  function  loadRole(){
+        $authManager=Yii::$app->authManager;
+         $roles=$authManager->getRolesByUser($this->id);
+         return ArrayHelper::map($roles,'name','name');
+     }
 
 }

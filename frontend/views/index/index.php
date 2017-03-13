@@ -7,22 +7,18 @@
 			<div class="area">
 				<div class="slide_items">
 					<ul>
-						<li><a href=""><img src="images/index_slide1.jpg" alt="" /></a></li>
-						<li><a href=""><img src="images/index_slide2.jpg" alt="" /></a></li>
-						<li><a href=""><img src="images/index_slide3.jpg" alt="" /></a></li>
-						<li><a href=""><img src="images/index_slide4.jpg" alt="" /></a></li>
-						<li><a href=""><img src="images/index_slide5.jpg" alt="" /></a></li>
-						<li><a href=""><img src="images/index_slide6.jpg" alt="" /></a></li>
+                           <?php foreach($goodsZoom as $Zoom): ?>
+						<li><a href="<?php echo Url::to(['goods/detail','id'=>$Zoom['id']])?>"><img src="<?php echo $Zoom['logo']?>" alt="" /></a></li>
+
+						 <?php endforeach; ?>
 					</ul>
 				</div>
 				<div class="slide_controls">
 					<ul>
 						<li class="on">1</li>
-						<li>2</li>
-						<li>3</li>
-						<li>4</li>
-						<li>5</li>
-						<li>6</li>
+						<?php for($i=1;$i<count($goodsZoom);$i++): ?>
+						<li><?php echo $i+1?></li>
+						<?php endfor;?>
 					</ul>
 				</div>
 			</div>
@@ -155,24 +151,7 @@
 					</ul>
 				</div>
 				<!-- 新品 end-->
-
 				<!-- 热卖商品 start -->
-				<div class="hot none">
-					<ul>
-						<?php foreach($hotList as $hot):?>
-							<li>
-								<dl>
-									<dt><a href="<?php echo Url::to(['goods/detail','id'=>$hot['id']])?>"><img src="<?php echo $hot['logo'];?>" alt="" /></a></dt>
-									<dd><a href="<?php echo Url::to(['goods/detail','id'=>$hot['id']])?>"><?php echo $hot['name'];?></a></dd>
-									<dd><span>售价：</span><strong> ￥<?php echo $hot['shop_price'];?></strong></dd>
-								</dl>
-							</li>
-						<?php endforeach;?>
-					</ul>
-				</div>
-				<!-- 热卖商品 end -->
-
-				<!-- 精品 atart -->
 				<div class="recommend none">
 					<ul>
 						<?php foreach($bestList as $best):?>
@@ -186,7 +165,25 @@
 						<?php endforeach;?>
 					</ul>
 				</div>
+				<!-- 热卖 end -->
+				<!-- 精品 atart -->
+
+				<div class="hot none">
+					<ul>
+						<?php foreach($hotList as $hot):?>
+							<li>
+								<dl>
+									<dt><a href="<?php echo Url::to(['goods/detail','id'=>$hot['id']])?>"><img src="<?php echo $hot['logo'];?>" alt="" /></a></dt>
+									<dd><a href="<?php echo Url::to(['goods/detail','id'=>$hot['id']])?>"><?php echo $hot['name'];?></a></dd>
+									<dd><span>售价：</span><strong> ￥<?php echo $hot['shop_price'];?></strong></dd>
+								</dl>
+							</li>
+						<?php endforeach;?>
+					</ul>
+				</div>
 				<!-- 精品 end -->
+
+
 
 			</div>
 
@@ -406,5 +403,5 @@
 <?php
 use frontend\assets\CommonAsset;
 CommonAsset::addCss($this,'@web/style/index.css');
-CommonAsset::addScript($this,'@web/style/index.js');
+CommonAsset::addScript($this,'@web/js/index.js');
 ?>

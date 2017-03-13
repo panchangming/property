@@ -61,6 +61,9 @@ class SiteController extends Controller
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+                'maxLength'=>4,
+                'minLength'=>3,
+                 'height'=>60
             ],
         ];
     }
@@ -210,4 +213,5 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
+
 }

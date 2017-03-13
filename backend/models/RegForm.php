@@ -1,20 +1,8 @@
 <?php
-
-/**
- * @link http://blog.kunx.org/.
- * @copyright Copyright (c) 2017-2-21 
- * @license kunx-edu@qq.com.
- */
-
 namespace backend\models;
 
 use yii\base\Model;
 
-/**
- * Description of RegForm
- *
- * @author kunx <kunx-edu@qq.com>
- */
 class RegForm extends Model {
 
     //put your code here

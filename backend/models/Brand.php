@@ -36,5 +36,9 @@ class Brand extends  ActiveRecord
     public static function getBrands() {
         return ArrayHelper::map(self::find()->orderBy('sort')->where(['status' => 1])->all(), 'id', 'name');
     }
+    public  static  function getListOne($id){
+        $row=self::findOne(['id'=>$id]);
+        return $row->name;
+    }
 
 }

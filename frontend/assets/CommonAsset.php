@@ -20,7 +20,7 @@ class CommonAsset extends AssetBundle
         'style/footer.css',
     ];
     public $js = [
-        'js/jquery-1.8.3.min.js',
+       // 'js/jquery-1.8.3.min.js',
         'js/header.js',
 //        'js/index.js',
     ];

@@ -4,7 +4,7 @@ namespace backend\controllers;
 
 use backend\models\GoodsCategory;
 
-class GoodsCategoryController extends \yii\web\Controller
+class GoodsCategoryController extends MembersController
 {
     public function actionAdd()
     {

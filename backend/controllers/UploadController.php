@@ -29,32 +29,30 @@ class UploadController extends  Controller
                     $p2 = substr($filehash, 2, 2);
                     return "{$p1}/{$p2}/{$filehash}.{$fileext}";
                 },
-                //END CLOSURE BY TIME
+
                 'validateOptions' => [
-                    'extensions' => ['jpg', 'png', 'jpeg'],
+                    'extensions' => ['jpg', 'png'],
                     'maxSize' => 1 * 1024 * 1024, //file size
                 ],
                 'beforeValidate' => function (UploadAction $action) {
-                    //throw new Exception('test error');
+
                 },
                 'afterValidate' => function (UploadAction $action) {},
                 'beforeSave' => function (UploadAction $action) {},
                 'afterSave' => function (UploadAction $action) {
-                    //使用七牛云存储保存用户上传的图片
-//                    $savePath = $action->getSavePath();
-//                    $qiniuSetting = \Yii::$app->params['qiniu'];
-//                    $ak =$qiniuSetting['ak'];
-//                    $sk = $qiniuSetting['sk'];
-//                    $domain = $qiniuSetting['domain'];
-//                    $bucket = $qiniuSetting['bucket'];
-//                    $qiniu = new Qiniu($ak, $sk,$domain, $bucket);
-//                    $key = $action->getFilename();
-//                    $qiniu->uploadFile($savePath,$key);
-//                    $url = $qiniu->getLink($key);
-//                    $action->output['msg'] = $url?'上传成功':'上传失败';
-                    $action->output['fileUrl'] = $action->getWebUrl(); //四哥许坤:下面跟了另外三种可以替换的信息,根据需要修改.如果想获取更多信息,可以参考下面
-//                    $action->output['savePath'] = $action->getSavePath();
-//                    $action->output['fileUrl'] =$url ;
+
+                    $savePath = $action->getSavePath();
+                    $ak = '9dkDwQk86ljQw0W9kFBey0kddrP1XFRzUxEjASCT';
+                    $sk = 'IaA_Sgh6GQhWyhBhUBwSWY_dBrd0Hw49IcLKAuEt';
+                    $domain = 'http://oli9lrtr4.bkt.clouddn.com/';
+                    $bucket = 'panchang';
+                    $qiniu = new Qiniu($ak, $sk,$domain, $bucket);
+                    $key = $action->getFilename();
+                    $qiniu->uploadFile($savePath,$key);
+                    $url = $qiniu->getLink($key);
+                    //var_dump($action);exit;
+                    $action->output['msg'] = $url?'上传成功':'上传失败';
+                    $action->output['fileUrl'] =$url ;
                 },
             ],
         ];

@@ -22,6 +22,11 @@ CommonAsset::register($this);
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+    <script type="text/javascript" src="/js/jquery-1.8.3.min.js"></script>
+
+
+
+
 </head>
 <body>
 <?php $this->beginBody() ?>
@@ -33,7 +38,17 @@ CommonAsset::register($this);
         </div>
         <div class="topnav_right fr">
             <ul>
-                <li>您好，欢迎来到京西！[<a href="login.html">登录</a>] [<a href="register.html">免费注册</a>] </li>
+
+                <li>您好，欢迎来到京西！[
+                    <a href="<?php echo Url::to(['member/logout'])?>">  <?php
+                        if(Yii::$app->user->isGuest){
+                            echo Html::a('请登录',['member/login']);
+                        }else{
+                            echo Yii::$app->user->identity->username;
+
+                        }
+                        ?></a>
+                  ] [<a href="<?php echo Url::to(['member/reg'])?>">免费注册</a>] </li>
                 <li class="line">|</li>
                 <li>我的订单</li>
                 <li class="line">|</li>
@@ -56,8 +71,8 @@ CommonAsset::register($this);
         <div class="search fl">
             <div class="search_form">
                 <div class="form_left fl"></div>
-                <form action="" name="serarch" method="get" class="fl">
-                    <input type="text" class="txt" value="请输入商品关键字" /><input type="submit" class="btn" value="搜索" />
+                <form action="index.html" name="serarch" method="get" class="fl">
+                    <input type="text" class="txt"   value="请输入商品关键字" /><input type="submit" class="btn" value="搜索" />
                 </form>
                 <div class="form_right fl"></div>
             </div>
@@ -140,52 +155,10 @@ CommonAsset::register($this);
     <!-- 导航条部分 start -->
     <div class="nav w1210 bc mt10">
         <!--  商品分类部分 start-->
-        <div class="category fl <?php echo $this->context->module->controller->id == 'index' && $this->context->module->requestedAction->id=='index'?'':'cat1'?>"> <!-- 非首页，需要添加cat1类 -->
-            <div class="cat_hd <?php echo $this->context->module->controller->id == 'index' && $this->context->module->requestedAction->id=='index'?'':'off'?>">  <!-- 注意，首页在此div上只需要添加cat_hd类，非首页，默认收缩分类时添加上off类，鼠标滑过时展开菜单则将off类换成on类 -->
-                <h2>全部商品分类</h2>
-                <em></em>
-            </div>
-            <div class="cat_bd <?php echo $this->context->module->controller->id == 'index' && $this->context->module->requestedAction->id=='index'?'':'none'?>">
-                <?php
-                foreach($this->context->goodsCategories as $top):
-                    if($top['level']==1):
-                        ?>
+         <?php
+          echo \frontend\components\GoodsCategoryWidget::widget();
 
-                        <div class="cat">
-                            <h3><a href=""><?php echo $top['name']; ?></a><b></b></h3>
-                            <div class="cat_detail">
-                                <?php
-                                foreach($this->context->goodsCategories as $sec):
-                                    if($sec['parent_id'] == $top['id']):
-                                        ?>
-                                        <dl class="dl_1st">
-                                            <dt><a href=""><?php echo $sec['name'];?></a></dt>
-                                            <dd>
-                                                <?php
-                                                foreach($this->context->goodsCategories as $thd):
-                                                    if($thd['parent_id'] == $sec['id']):
-                                                        ?>
-                                                        <a href="<?php echo Url::to(['cat/list','id'=>$thd['id']]);?>"><?php echo $thd['name'];?></a>
-                                                        <?php
-                                                    endif;
-                                                endforeach;
-                                                ?>
-                                            </dd>
-                                        </dl>
-                                        <?php
-                                    endif;
-                                endforeach;
-                                ?>
-                            </div>
-                        </div>
-                        <?php
-                    endif;
-                endforeach;
-                ?>
-
-            </div>
-
-        </div>
+         ?>
         <!--  商品分类部分 end-->
 
         <div class="navitems fl">
@@ -210,19 +183,9 @@ CommonAsset::register($this);
 <div style="clear:both;"></div>
 
 <!-- 底部导航 start -->
-<div class="bottomnav w1210 bc mt10">
-    <?php $i=0;foreach($this->context->articleCategories as $category):?>
-        <div class="bnav<?php echo ++$i;?>">
-            <h3><b></b> <em><?php echo $category['name'];?></em></h3>
-            <ul>
-                <?php foreach($this->context->articleList[$category->id] as $article):?>
-                    <li><a href=""><?php echo $article['name'];?></a></li>
-                <?php endforeach;?>
-            </ul>
-        </div>
-    <?php endforeach;?>
-
-</div>
+<?php
+ echo \frontend\components\ArticleWidget::widget();
+?>
 <!-- 底部导航 end -->
 
 <div style="clear:both;"></div>

@@ -111,8 +111,8 @@
 				<!-- 图片预览区域 start -->
 				<div class="preview fl">
 					<div class="midpic">
-						<a href="/images/preview_l1.jpg" class="jqzoom" rel="gal1">   <!-- 第一幅图片的大图 class 和 rel属性不能更改 -->
-							<img src="/images/preview_m1.jpg" alt="" />               <!-- 第一幅图片的中图 -->
+						<a href="<?php echo $goodsDetail->logo;?>" class="jqzoom" rel="gal1">   <!-- 第一幅图片的大图 class 和 rel属性不能更改 -->
+							<img src="<?php echo  $goodsDetail->logo ?>" width="350px" height="350px" alt="" />               <!-- 第一幅图片的中图 -->
 						</a>
 					</div>
 	
@@ -124,46 +124,13 @@
 						<div class="smallpic_wrap">
 							<ul>
 								<li class="cur">
-									<a class="zoomThumbActive" href="javascript:void(0);" rel="{gallery: 'gal1', smallimage: '/images/preview_m1.jpg',largeimage: '/images/preview_l1.jpg'}"><img src="/images/preview_s1.jpg"></a>
+									<a class="zoomThumbActive" href="javascript:void(0);" rel="{gallery: 'gal1', smallimage: '<?php echo $goodsDetail->logo;?>',largeimage: '<?php echo $goodsDetail->logo;?>'}"><img src="<?php echo $goodsDetail->logo;?>"></a>
 								</li>
+								<?php foreach($goodsGallery as $gallery): ?>
 								<li>
-									<a href="javascript:void(0);" rel="{gallery: 'gal1', smallimage: '/images/preview_m2.jpg',largeimage: '/images/preview_l2.jpg'}"><img src="/images/preview_s2.jpg"></a>
+									<a href="javascript:void(0);" rel="{gallery: 'gal1', smallimage: '<?php echo $gallery['path'];?>',largeimage: '<?php echo $gallery['path'];?>'}"><img src="<?php echo $gallery['path'];?>"></a>
 								</li>
-								<li>
-									<a href="javascript:void(0);" 
-									rel="{gallery: 'gal1', smallimage: '/images/preview_m3.jpg',largeimage: '/images/preview_l3.jpg'}">  
-	    							<img src="/images/preview_s3.jpg"></a>
-								</li>
-								<li>
-									<a href="javascript:void(0);" 
-									rel="{gallery: 'gal1', smallimage: '/images/preview_m4.jpg',largeimage: '/images/preview_l4.jpg'}">  
-	    							<img src="/images/preview_s4.jpg"></a>
-								</li>
-								<li>
-									<a href="javascript:void(0);" 
-									rel="{gallery: 'gal1', smallimage: '/images/preview_m5.jpg',largeimage: '/images/preview_l5.jpg'}">  
-	    							<img src="/images/preview_s5.jpg"></a>
-								</li>
-								<li>
-									<a href="javascript:void(0);" 
-									rel="{gallery: 'gal1', smallimage: '/images/preview_m6.jpg',largeimage: '/images/preview_l6.jpg'}">  
-	    							<img src="/images/preview_s6.jpg"></a>
-								</li>
-								<li>
-									<a href="javascript:void(0);" 
-									rel="{gallery: 'gal1', smallimage: '/images/preview_m7.jpg',largeimage: '/images/preview_l7.jpg'}">  
-	    							<img src="/images/preview_s7.jpg"></a>
-								</li>
-								<li>
-									<a href="javascript:void(0);" 
-									rel="{gallery: 'gal1', smallimage: '/images/preview_m8.jpg',largeimage: '/images/preview_l8.jpg'}">  
-	    							<img src="/images/preview_s8.jpg"></a>
-								</li>
-								<li>
-									<a href="javascript:void(0);" 
-									rel="{gallery: 'gal1', smallimage: '/images/preview_m9.jpg',largeimage: '/images/preview_l9.jpg'}">  
-	    							<img src="/images/preview_s9.jpg"></a>
-								</li>
+								<?php endforeach; ?>
 							</ul>
 						</div>
 						
@@ -179,15 +146,15 @@
 						<li class="shop_price"><span>本店价：</span> <strong>￥<?php echo $goodsDetail->shop_price;?></strong> <a href="">(降价通知)</a></li>
 						<li><span>上架时间：</span><?php echo date('Y-m-d H:i:s',$goodsDetail->inputtime);?></li>
 					</ul>
-					<form action="" method="post" class="choose">
+					<form action="<?php echo \yii\helpers\Url::to(['cart/addtocart'])?>" method="get" class="choose" >
 						<ul>
-							
+							  <input type="hidden" name="goods_id" value="<?php echo $goodsDetail->id?>">
 							<li>
 								<dl>
 									<dt>购买数量：</dt>
 									<dd>
 										<a href="javascript:;" id="reduce_num"></a>
-										<input type="text" name="amount" value="1" class="amount"/>
+										<input type="text" name="num" value="1" class="amount"/>
 										<a href="javascript:;" id="add_num"></a>
 									</dd>
 								</dl>
@@ -467,5 +434,21 @@
 	use frontend\assets\CommonAsset;
 	CommonAsset::addCss($this,'@web/style/common.css');
 	CommonAsset::addCss($this,'@web/style/goods.css');
+	CommonAsset::addCss($this,'@web/style/jqzoom.css');
 	CommonAsset::addScript($this,'@web/js/goods.js');
+	CommonAsset::addScript($this,'@web/js/jqzoom-core.js');
 	?>
+	<!-- jqzoom 效果 -->
+	<script type="text/javascript">
+		$(function(){
+			$('.jqzoom').jqzoom({
+				zoomType: 'standard',
+				lens:true,
+				preloadImages: false,
+				alwaysOn:false,
+				title:false,
+				zoomWidth:200,
+				zoomHeight:200
+			});
+		})
+	</script>

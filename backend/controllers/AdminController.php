@@ -1,22 +1,16 @@
 <?php
 
-/**
- * @link http://blog.kunx.org/.
- * @copyright Copyright (c) 2017-2-21 
- * @license kunx-edu@qq.com.
- */
+
 
 namespace backend\controllers;
+use backend\models\AccessForm;
 use yii\web\Controller;
 use backend\models\RegForm;
 use backend\models\LoginForm;
 use backend\models\Admin;
+use yii\web\HttpException;
 
-/**
- * Description of AdminController
- *
- * @author kunx <kunx-edu@qq.com>
- */
+
 class AdminController extends Controller {
     public function actions()
     {
@@ -77,11 +71,27 @@ class AdminController extends Controller {
     }
 
     public function actionIndex() {
-        //获取品牌列表
+        //获取管理员列表
         $list = Admin::find()->all();
         return $this->render('index', [
                     'list' => $list
         ]);
     }
+   public  function  actionAccess($id){
+       $admin=Admin::findOne($id);
+       if($admin==null){
+           throw new HttpException(404,'该用户不存在');
+       }
+       $model=new AccessForm();
+       $model->role=$admin->loadRole();
+       if($model->load(\Yii::$app->request->post())&&$model->validate()){
+           if($admin->accessRole($model->role)){
+               \Yii::$app->session->setFlash('success','权限添加成功');
+               return $this->redirect(['index']);
+           }
+
+       }
+       return $this->render('access',['model'=>$model]);
+   }
 
 }

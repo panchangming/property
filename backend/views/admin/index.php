@@ -20,7 +20,9 @@ use yii\helpers\Url;
                 <td><?php echo $row['email']; ?></td>
                 <td><?php echo $row['status'] ? '正常' : '禁止登陆' ?></td>
                 <td><?php echo date('Y-m-d H:i:s', $row['created_at']); ?></td>
-                <td><a href="<?php echo Url::to(['delete', 'id' => $row['id']]); ?>">删除</a></td>
+                <td><a href="<?php echo Url::to(['delete', 'id' => $row['id']]); ?>" class='btn btn-danger btn-xs'>删除</a>
+                    <a href="<?php echo Url::to(['access', 'id' => $row['id']]); ?>" class='btn btn-warning btn-xs'>授权</a>
+                </td>
             </tr>
         <?php endforeach;?>
     </table>

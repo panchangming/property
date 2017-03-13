@@ -105,4 +105,8 @@ class GoodsCategory extends \yii\db\ActiveRecord
         $nesetsets = new NestedSets($db,self::tableName(),'lft','rght','parent_id','id','level');
         return $nesetsets->delete($id);
     }
+    public  static  function getCategoryOne($id){
+        $row=self::findOne(['id'=>$id]);
+        return $row->name;
+    }
 }

@@ -6,7 +6,7 @@ use backend\models\Article;
 use backend\models\ArticleDetail;
 use yii\data\Pagination;
 
-class ArticleController extends \yii\web\Controller
+class ArticleController extends MembersController
 {
     public function actionAdd()
     {
@@ -17,9 +17,11 @@ class ArticleController extends \yii\web\Controller
             //获取数据
             $articleModel->load(\Yii::$app->request->post());
             $articleDetailModel->load(\Yii::$app->request->post());
+            $articleModel->inputtime=time();
             //验证数据,执行添加
             if($rst = $articleModel->save()){
                 $article_id = $articleModel->primaryKey;
+
                 $articleDetailModel->article_id = $article_id;
                 if($articleDetailModel->save()){
                     //跳转

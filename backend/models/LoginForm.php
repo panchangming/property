@@ -1,19 +1,11 @@
 <?php
 
-/**
- * @link http://blog.kunx.org/.
- * @copyright Copyright (c) 2017-2-21 
- * @license kunx-edu@qq.com.
- */
+
 
 namespace backend\models;
 use yii\base\Model;
 
-/**
- * Description of RegForm
- *
- * @author kunx <kunx-edu@qq.com>
- */
+
 class LoginForm extends Model {
 
     //put your code here
@@ -35,6 +27,7 @@ class LoginForm extends Model {
             'username'   => '用户名',
             'password'   => '密码',
             'verify'=>'验证码',
+            'rememberMe'=>'记住密码'
         ];
     }
 

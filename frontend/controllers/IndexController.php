@@ -22,6 +22,7 @@ class IndexController extends Controller
     public $articleList;
 
     public $layout = 'common';
+
     public function actionIndex()
     {
         //读取分类
@@ -32,6 +33,7 @@ class IndexController extends Controller
         $newList = Goods::getGoodsListByGoodsStatus(1);
         //读取精品
         $bestList = Goods::getGoodsListByGoodsStatus(2);
+
         //读取热销
         $hotList = Goods::getGoodsListByGoodsStatus(4);
 
@@ -55,8 +57,11 @@ class IndexController extends Controller
         $this->goodsCategories = $goodsCategories;
         $this->articleCategories = $articleCategories;
         $this->articleList = $articleList;
+        $goodsZoom=Goods::find()->select('logo,id')->asArray(true)->limit('0,5')->all();
+
         return $this->render('index',[
 //            'goodsCategories'=>$goodsCategories,
+             'goodsZoom'=>$goodsZoom,
             'newList'=>$newList,
             'bestList'=>$bestList,
             'hotList'=>$hotList,
@@ -91,4 +96,11 @@ class IndexController extends Controller
             'articleCategories'=>$articleCategories,
         ]);
     }
+    public function actionAddress()
+    {
+        return $this->render('ress');
+    }
+
+
+
 }
